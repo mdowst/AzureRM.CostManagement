@@ -26,9 +26,11 @@
     AzureRM.CostManagement
     #>
 
-    [CmdletBinding(DefaultParameterSetName='')]
+    [CmdletBinding(DefaultParameterSetName='VMName')]
+    [OutputType([decimal], ParameterSetName="VMName")]
     
         Param(
+            [Parameter(Mandatory=$true, ParameterSetName="VMName")][string]$VMName
         )
 
 
@@ -45,7 +47,7 @@
 
         foreach ($vm in $vms) {
             $json = ConvertFrom-Json -InputObject $vm.Properties.InstanceData
-            if ($json.'Microsoft.Resources'.resourceUri -like '*test-azure-vda*') {
+            if ($json.'Microsoft.Resources'.resourceUri -like '*$VMName*') {
                 $computeq += $vm.Properties.Quantity
             }
         }
