@@ -36,17 +36,34 @@
     }
 
     Process {
-        $quantity = 0;
-        $vms = $(Get-UsageAggregates -ReportedStartTime 2017-10-21T00:00:00Z -ReportedEndTime 2017-10-22T00:00:00Z -AggregationGranularity Daily).UsageAggregations | Where-Object {$_.Properties.MeterCategory -eq 'Virtual Machines'}
+        $cost     = @{}
+        $computeq = 0;
+        $diskq    = 0;
+        $data     = $(Get-UsageAggregates -ReportedStartTime 2017-10-21T00:00:00Z -ReportedEndTime 2017-10-22T00:00:00Z -AggregationGranularity Daily).UsageAggregations
+        $vms      = $data | Where-Object {$_.Properties.MeterCategory -eq 'Virtual Machines'}
+        $storages = $data | Where-Object {$_.Properties.MeterCategory -eq 'Storage' -and $_.Properties.MeterName -like '*Managed Disk*'}
 
         foreach ($vm in $vms) {
             $json = ConvertFrom-Json -InputObject $vm.Properties.InstanceData
             if ($json.'Microsoft.Resources'.resourceUri -like '*test-azure-vda*') {
-                $quantity += $vm.Properties.Quantity
+                $computeq += $vm.Properties.Quantity
             }
         }
 
-        $quantity
+        foreach ($storage in $storages) {
+            $json = ConvertFrom-Json -InputObject $storage.Properties.InstanceData
+            if ($json.'Microsoft.Resources'.resourceUri -like "*$disk*") {
+                $diskq += $storage.Properties.Quantity
+            }
+        }
+
+        $cost = @{
+            "VMName"       = "test-azure-vda";
+            "ComputeHours" = $computeq;
+            "DiskUnits"    = $diskq;
+        }
+
+        $cost
     }
 
     End {
