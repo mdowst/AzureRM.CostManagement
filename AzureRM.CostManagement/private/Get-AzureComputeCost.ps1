@@ -2,26 +2,29 @@ Function Get-AzureComputeCost {
     
     <#
     .SYNOPSIS
-    Collects large amounts of Azure usage data and returns VM and Storage entries.
+    Returns the cost for the compute part of an Azure Virtual Machine.
 
     .DESCRIPTION
-    To recover large sets of Azure usage data multiple calls to the Azure RateCard API must be made.
-    This cmdlet automates these calls and returns only the VM and Storage entries.
+    This cmdlet queries Azure Usage APIs to return the price of the compute part of an Azure VM over a period of time.
+    To extract this information this cmdlet parses the usage data extracted from the Get-AzureCostData.
 
     .NOTES
     Author:        Kilian Arjona
     Version:       v0.1.0
-    Date released: 24/10/2017
+    Date released: 25/10/2017
 
     .LINK
     https://github.com/karjona/AzureRM.CostManagement
 
-    .PARAMETER StartDate
-    Specifies the start date for the usage entries.
+    .PARAMETER UsageData
+    Specifies the resource cost data to use. This data can be acquired using Get-AzureCostData.
+
+    .PARAMETER VMName
+    Specifies the VM to filter.
 
     .EXAMPLE
-    Get-AzureCostData -StartDate 2017-08-01 -EndDate 2017-10-01
-    Returns all VM and Storage usage entries from the specified date range.
+    Get-AzureComputeCost -UsageData $(Get-AzureCostData -StartDate 2017-08-01 -EndDate 2017-10-01) -VMName "myvm"
+    Returns the incurred total cost for the compute part of the VM "myvm" from the 1st of Agust to the 1st of October of 2017.
 
     .COMPONENT
     AzureRM.CostManagement
@@ -37,14 +40,26 @@ Function Get-AzureComputeCost {
 
     # Implement test changes
     Process {
-        $ComputeCost = @{}
+        $ComputeCost = @()
         $vms = $UsageData | Where-Object {$_.Properties.MeterCategory -eq 'Virtual Machines'}
         foreach ($vm in $vms) {
             $json = ConvertFrom-Json -InputObject $vm.Properties.InstanceData
             if ($json.'Microsoft.Resources'.resourceUri -like "*$VMName*") {
-                $computeq += $vm.Properties.Quantity
+                $CostEntry = [PSCustomObject]@{
+                    Size     = $vm.Properties.MeterSubCategory
+                    Region   = $vm.Properties.MeterRegion
+                    Quantity = $vm.Properties.Quantity
+                }
+                $ComputeCost += $CostEntry
             }
         }
-        $computeq
+        $ComputeCost = $ComputeCost | Group-Object 'Size', 'Region'
+        foreach ($g in $ComputeCost) {
+            $total = 0
+            $g.group.Quantity | ForEach-Object {
+                $total += $_
+            }
+            Write-Output "Quantity for size $($g.group[0].Size.ToString()) in region $($g.group[0].Region.ToString()): $total"
+        }
     }
 }
