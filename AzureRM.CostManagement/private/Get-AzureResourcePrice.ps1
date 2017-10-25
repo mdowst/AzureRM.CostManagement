@@ -1,0 +1,2 @@
+# https://management.azure.com/subscriptions/f39f241c-9db7-4441-9db5-f3d5fb22eff6/providers/Microsoft.Commerce/RateCard?api-version=2016-08-31-preview&$filter=OfferDurableId eq 'MS-AZR-0003P' and Currency eq 'EUR' and Locale eq 'es-ES' and RegionInfo eq 'ES'
+# Authorization || Bearer + Get-AzureRmCachedAccessToken

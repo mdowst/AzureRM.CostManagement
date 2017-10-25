@@ -38,7 +38,6 @@ Function Get-AzureComputeCost {
             [Parameter(Mandatory=$false, ParameterSetName="VMName")][string]$VMName
         )
 
-    # Implement test changes
     Process {
         $ComputeCost = @()
         $vms = $UsageData | Where-Object {$_.Properties.MeterCategory -eq 'Virtual Machines'}
