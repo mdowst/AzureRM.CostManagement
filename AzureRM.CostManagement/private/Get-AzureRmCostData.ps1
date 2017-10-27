@@ -11,7 +11,7 @@ Function Get-AzureRmCostData {
     .NOTES
     Author:        Kilian Arjona
     Version:       v0.1.0
-    Date released: 24/10/2017
+    Date released: 27/10/2017
 
     .LINK
     https://github.com/karjona/AzureRM.CostManagement
