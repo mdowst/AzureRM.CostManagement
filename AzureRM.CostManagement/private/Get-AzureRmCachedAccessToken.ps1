@@ -1,7 +1,7 @@
 # Portions of this code (c) Stéphane Lapointe
 # Licensed under MIT license, used with permission
 # https://gallery.technet.microsoft.com/scriptcenter/Easily-obtain-AccessToken-3ba6e593
-Function Get-AzureRmCachedAccessToken() {
+Function Get-AzureRmCachedAccessToken {
 
     <#
     .SYNOPSIS

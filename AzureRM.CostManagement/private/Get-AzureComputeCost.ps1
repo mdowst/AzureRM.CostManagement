@@ -58,7 +58,10 @@ Function Get-AzureComputeCost {
             $g.group.Quantity | ForEach-Object {
                 $total += $_
             }
+            $price = Get-AzureResourcePrice -Category 'Virtual Machines' -Region $($g.group[0].Region.ToString()) -Resource $($g.group[0].Size.ToString())
             Write-Output "Quantity for size $($g.group[0].Size.ToString()) in region $($g.group[0].Region.ToString()): $total"
+            Write-Output "Price is: $price"
+            Write-Output "Total is: $($total*$price)"
         }
     }
 }
