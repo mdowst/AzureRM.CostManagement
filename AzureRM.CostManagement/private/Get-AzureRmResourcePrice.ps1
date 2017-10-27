@@ -1,4 +1,4 @@
-Function Get-AzureResourcePrice {
+Function Get-AzureRmResourcePrice {
 
     <#
     .SYNOPSIS

@@ -1,4 +1,4 @@
-Function Get-AzureComputeCost {
+Function Get-AzureRmComputeCost {
     
     <#
     .SYNOPSIS
@@ -6,7 +6,7 @@ Function Get-AzureComputeCost {
 
     .DESCRIPTION
     This cmdlet queries Azure Usage APIs to return the price of the compute part of an Azure VM over a period of time.
-    To extract this information this cmdlet parses the usage data extracted from the Get-AzureCostData.
+    To extract this information this cmdlet parses the usage data extracted from the Get-AzureRmCostData.
 
     .NOTES
     Author:        Kilian Arjona
@@ -17,13 +17,13 @@ Function Get-AzureComputeCost {
     https://github.com/karjona/AzureRM.CostManagement
 
     .PARAMETER UsageData
-    Specifies the resource cost data to use. This data can be acquired using Get-AzureCostData.
+    Specifies the resource cost data to use. This data can be acquired using Get-AzureRmCostData.
 
     .PARAMETER VMName
     Specifies the VM to filter.
 
     .EXAMPLE
-    Get-AzureComputeCost -UsageData $(Get-AzureCostData -StartDate 2017-08-01 -EndDate 2017-10-01) -VMName "myvm"
+    Get-AzureRmComputeCost -UsageData $(Get-AzureRmCostData -StartDate 2017-08-01 -EndDate 2017-10-01) -VMName "myvm"
     Returns the incurred total cost for the compute part of the VM "myvm" from the 1st of Agust to the 1st of October of 2017.
 
     .COMPONENT
@@ -58,7 +58,7 @@ Function Get-AzureComputeCost {
             $g.group.Quantity | ForEach-Object {
                 $total += $_
             }
-            $price = Get-AzureResourcePrice -Category 'Virtual Machines' -Region $($g.group[0].Region.ToString()) -Resource $($g.group[0].Size.ToString())
+            $price = Get-AzureRmResourcePrice -Category 'Virtual Machines' -Region $($g.group[0].Region.ToString()) -Resource $($g.group[0].Size.ToString())
             Write-Output "Quantity for size $($g.group[0].Size.ToString()) in region $($g.group[0].Region.ToString()): $total"
             Write-Output "Price is: $price"
             Write-Output "Total is: $($total*$price)"
