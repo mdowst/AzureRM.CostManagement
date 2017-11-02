@@ -31,7 +31,7 @@ Function Get-AzureRmComputeCost {
     #>
 
     [CmdletBinding(DefaultParameterSetName='VMName')]
-    #[OutputType([])]
+    [OutputType('Azure.CostObject')]
     
         Param(
             [Parameter(Mandatory=$true)]$UsageData,
@@ -59,9 +59,17 @@ Function Get-AzureRmComputeCost {
                 $total += $_
             }
             $price = Get-AzureRmResourcePrice -Category 'Virtual Machines' -Region $($g.group[0].Region.ToString()) -Resource $($g.group[0].Size.ToString())
-            Write-Output "Quantity for size $($g.group[0].Size.ToString()) in region $($g.group[0].Region.ToString()): $total"
-            Write-Output "Price is: $price"
-            Write-Output "Total is: $($total*$price)"
+            $cost  = [PSCustomObject]@{
+                PSTypeName     = 'Azure.CostObject'
+                Name           = $VMName
+                Category       = 'Virtual Machines'
+                Region         = $($g.group[0].Region.ToString())
+                Resource       = $($g.group[0].Size.ToString())
+                Quantity       = $total
+                Cost           = $($total*$price)
+                Currency       = 'EUR'
+            }
+            $cost
         }
     }
 }
