@@ -50,7 +50,13 @@ PowerShellVersion = '3.0'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-# RequiredModules = @()
+RequiredModules = @(
+    @{
+        ModuleName    = "AzureRM";
+        ModuleVersion = "3.0";
+        Guid          = "b433e830-b479-4f7f-9c80-9cc6c28e1b51"
+    }
+)
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()
