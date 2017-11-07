@@ -37,9 +37,9 @@ Function Get-AzureRmResourcePrice {
     [OutputType([decimal])]
     
         Param(
-            [Parameter(Mandatory=$false)][string]$Category,
-            [Parameter(Mandatory=$false)][string]$Region,
-            [Parameter(Mandatory=$false)][string]$Resource
+            [Parameter(Mandatory=$true)][string]$Category,
+            [Parameter(Mandatory=$true)][string]$Region,
+            [Parameter(Mandatory=$true)][string]$Resource
         )
 
     Process {

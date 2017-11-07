@@ -2,7 +2,7 @@ Get-Module -Name AzureRM.CostManagement -All | Remove-Module -Force -ErrorAction
 Import-Module -Name "$PSScriptRoot\..\AzureRM.CostManagement\AzureRM.CostManagement.psd1" -Force -ErrorAction Stop
 
 InModuleScope "AzureRM.CostManagement" {
-    Describe "default test" {
+    Describe "Get-AzureRmStorageCost tests" {
         It "fails" {
             $true | Should -Be $false
         }

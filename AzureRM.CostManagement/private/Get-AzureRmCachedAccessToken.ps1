@@ -33,7 +33,7 @@ Function Get-AzureRmCachedAccessToken {
     }
     $azureRmProfile = [Microsoft.Azure.Commands.Common.Authentication.Abstractions.AzureRmProfileProvider]::Instance.Profile
     if (-not $azureRmProfile.Accounts.Count) {
-        Write-Error 'No account found in the context. Please login using Login-AzureRMAccount.'
+        Write-Error 'No account found in the context. Please login using Login-AzureRmAccount.'
     }
     $currentAzureContext = Get-AzureRmContext
     $profileClient = New-Object Microsoft.Azure.Commands.ResourceManager.Common.RMProfileClient($azureRmProfile)
