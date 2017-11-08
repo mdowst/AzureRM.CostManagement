@@ -49,8 +49,11 @@
     Process {
         #TODO: Add Storage costs
         #TODO: Get costs for all resources in Resource Group
+        $totalcomputecost = 0;
+
         $data    = Get-AzureRmCostData -StartDate $StartDate -EndDate $EndDate
         $compute = Get-AzureRmComputeCost -UsageData $data -VMName $VMName
+        $compute.Cost | ForEach-Object { $totalcomputecost += $_ }
         $total = [PSCustomObject]@{
             PSTypeName = 'Azure.TotalCostObject'
             Name       = $VMName
@@ -58,7 +61,7 @@
             EndDate    = $EndDate
             Compute    = $compute
             Storage    = $storage
-            Cost       = "{0:N2}" -f $compute.Cost + $storage.Cost
+            Cost       = "{0:N2}" -f $totalcomputecost + $storage.Cost
             Currency   = 'EUR'
         }
         $total
