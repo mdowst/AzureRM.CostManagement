@@ -41,8 +41,8 @@ Function Get-AzureRmCostData {
     #[OutputType([Azure.CostData])]
     
         Param(
-            [Parameter(Mandatory=$false)][datetime]$StartDate,
-            [Parameter(Mandatory=$false)][datetime]$EndDate,
+            [Parameter(Mandatory=$true)][datetime]$StartDate,
+            [Parameter(Mandatory=$true)][datetime]$EndDate,
             [Parameter(Mandatory=$false)][string]$Continuation,
             [Parameter(Mandatory=$false)]$ExistingData
         )

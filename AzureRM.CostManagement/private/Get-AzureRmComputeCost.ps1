@@ -35,7 +35,7 @@ Function Get-AzureRmComputeCost {
     
         Param(
             [Parameter(Mandatory=$true)]$UsageData,
-            [Parameter(Mandatory=$false, ParameterSetName="VMName")][string]$VMName
+            [Parameter(Mandatory=$true, ParameterSetName="VMName")][string]$VMName
         )
 
     Process {
