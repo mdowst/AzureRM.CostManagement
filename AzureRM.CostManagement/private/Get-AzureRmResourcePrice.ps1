@@ -47,7 +47,7 @@ Function Get-AzureRmResourcePrice {
             'Authorization' = "Bearer $(Get-AzureRmCachedAccessToken)"
         }
         $subscriptionid = $(Get-AzureRmSubscription -WarningAction SilentlyContinue).Id.ToString()
-        $prices = Invoke-WebRequest -Uri "https://management.azure.com/subscriptions/$subscriptionid/providers/Microsoft.Commerce/RateCard?api-version=2016-08-31-preview&`$filter=OfferDurableId eq 'MS-AZR-0003P' and Currency eq 'EUR' and Locale eq 'en-US' and RegionInfo eq 'ES'" -ContentType "application/json" -Method Get -Headers $header
+        $prices = Invoke-WebRequest -UseBasicParsing -Uri "https://management.azure.com/subscriptions/$subscriptionid/providers/Microsoft.Commerce/RateCard?api-version=2016-08-31-preview&`$filter=OfferDurableId eq 'MS-AZR-0003P' and Currency eq 'EUR' and Locale eq 'en-US' and RegionInfo eq 'ES'" -ContentType "application/json" -Method Get -Headers $header
         $json   = ConvertFrom-Json -InputObject $prices
         $($json.Meters | Where-Object {$_.MeterCategory -eq $Category -and $_.MeterRegion -eq $Region -and $_.MeterSubCategory -eq $Resource}).MeterRates.0
     }
